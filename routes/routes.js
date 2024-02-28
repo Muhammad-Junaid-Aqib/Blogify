@@ -8,11 +8,16 @@ router.get("/signin", (req, res) => {
 });
 
 router.post('/signin', async (req, res) => {
-  const {email, password} = req.body
-  const user = User.matchPassword(email, password)
-
-  console.log('Users', user)
-  return res.redirect('/')
+  const { email, password } = req.body
+  try {
+    const token = await User.matchPasswordSndGenerateToken(email, password)
+    // console.log('token', token)
+    return res.cookie("token", token).redirect('/')
+  } catch(error) {
+    return res.render('signin', {
+      error: 'Incorrect Email or Password'
+    })
+  }
 
 })
 router.get("/signup", (req, res) => {
