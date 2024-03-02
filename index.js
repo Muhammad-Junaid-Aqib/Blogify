@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser')
 const userRouter = require('./routes/routes');
 const blogRouter = require('./routes/blogRoutes')
 const { checkForAuthenticationCookie } = require("./middlewares/authenticationMiddleware");
+const Blog = require("./models/blog");
 
 const app = express();
 const PORT = 5000;
@@ -15,14 +16,17 @@ mongoose.connect('mongodb://localhost:27017/Blogify').then( (e) => console.log("
 app.set("view engine", "ejs");
 app.set('views', path.resolve('./views'))
 
+// midleware
 app.use(express.urlencoded({ extended: false}))
 app.use(cookieParser())
 app.use(checkForAuthenticationCookie('token'))
+app.use(express.static(path.resolve('./public')))
 
-app.get("/", (req, res) => {
-    //   return res.send("Welcome to Home page!");
+app.get("/", async (req, res) => {
+    const allBlogs = await Blog.find({})
     return res.render("home",{
-      user: req.user
+      user: req.user,
+      blogs: allBlogs
     })
 });
 
