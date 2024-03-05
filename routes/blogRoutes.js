@@ -25,7 +25,8 @@ router.get('/add-new-blog', (req, res) => {
 })
 
 router.get('/:id', async (req,res) => {
-    const blog = await Blog.findById(req.params.id)
+    const blog = await Blog.findById(req.params.id).populate('createdBy')
+    // console.log("blog", blog)
     return res.render('blog', {
         user: req.user,
         blog
@@ -41,7 +42,7 @@ router.post('/', uploads.single('coverImage'), async (req, res)=>{
         createdBy: req.user._id,
         coverImageURL: `/uploads/${req.file.filename}`
     })
-    return res.redirect('/')
+    return res.redirect(`/blog/${blog._id}`)
 })
 
 module.exports = router;
