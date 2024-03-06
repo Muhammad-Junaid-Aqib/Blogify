@@ -3,7 +3,8 @@ const multer  = require('multer')
 const path = require('path')
 
 // import 
-const Blog = require('../models/blog')
+const Blog = require('../models/blog');
+const Comment = require("../models/comment");
 const router = Router();
 
 const storage = multer.diskStorage({
@@ -43,6 +44,17 @@ router.post('/', uploads.single('coverImage'), async (req, res)=>{
         coverImageURL: `/uploads/${req.file.filename}`
     })
     return res.redirect(`/blog/${blog._id}`)
+})
+
+// route for comments
+
+router.post('/comment/:blogId', async (req, res) => {
+    await Comment.create({
+        content: req.body.content,
+        blogId: req.params.blogId,
+        createdBy: req.user._id
+    })
+    return res.redirect(`/blog/${req.params.blogId}`)
 })
 
 module.exports = router;

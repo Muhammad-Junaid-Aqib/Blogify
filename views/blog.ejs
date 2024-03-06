@@ -15,6 +15,19 @@
         <img src="<%= blog.createdBy.profileImg %>" width="50px"/>
         <%= blog.createdBy.fullName %>
     </div>
+
+    <div class="container mt-4 mb-3">
+        <h4>Comments</h4>
+        <% if (locals.user) { %>
+            <form action="/blog/comment/<%= blog._id %>" method="post">
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="content" placeholder="Enter your comment here">
+                </div>      
+                <button type="submit" class="btn btn-sm btn-primary">Add Comment</button> 
+            </form>
+        <% } %>
+        
+    </div >
     <%- include('./partials/scripts') %>
 </body>
 </html>

@@ -32,7 +32,6 @@ app.get("/", async (req, res) => {
 
 app.use('/user', userRouter)
 app.use('/blog', blogRouter)
-
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
